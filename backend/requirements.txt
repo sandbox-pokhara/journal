@@ -1,0 +1,7 @@
+python-dotenv==1.*
+psycopg2-binary==2.*
+pydantic==2.*
+pydantic-settings==2.*
+django-ninja==1.*
+Django==5.*
+whitenoise==6.*
