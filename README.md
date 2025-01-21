@@ -1,19 +1,23 @@
-# journal
+# Journal
 
-A django app to keep track of attendance, absences, holidays with discord bot and superset integration
+A Django app to keep track of attendance, absences, holidays with Discord bot and Superset integration.
 
 ## Run Locally using Docker
 
-1. Run a postgres server on port 5432, if you haven't already.
-
+### Clone the repository
+Clone the GitHub repository to your local machine:
 ```
-task run-db
+git clone https://github.com/sandbox-pokhara/journal.git
+cd journal
 ```
 
-1. Build and run the server.
+### Setup the .env file
+Create a `.env` file inside the backend and discord_bot directories according to the provided `sample.env` file.
 
+### Build and run the containers
+Run the following command to build and start the containers:
 ```
-task build run
+docker-compose up --build -d
 ```
 
 ## License

@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:13-alpine
+    container_name: journal-postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=journal
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - journal-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "journal"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  backend:
+    image: ghcr.io/sandbox-pokhara/journal
+    container_name: journal-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    networks:
+      - journal-network
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - postgres
+
+  discord_bot:
+    image: ghcr.io/sandbox-pokhara/journal-bot
+    container_name: journal-discord-bot
+    restart: always
+    env_file:
+      - ./discord_bot/.env
+    depends_on:
+      - backend
+    networks:
+      - journal-network
+
+networks:
+  journal-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

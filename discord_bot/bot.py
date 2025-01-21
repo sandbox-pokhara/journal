@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context  # type: ignore
-from env import ENV
 
+from env import ENV
 
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
