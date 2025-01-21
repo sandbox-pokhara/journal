@@ -1,12 +1,17 @@
 [tool.isort]
+src_paths = ["backend", "discord_bot"]
+
 line_length = 79
 force_single_line = true
 
 [tool.black]
 line-length = 79
 preview = true
+extend-exclude = "migrations"
+
 
 [tool.pyright]
 typeCheckingMode = "strict"
-include = ["backend", "discord-bot"]
+executionEnvironments = [{ root = "backend" }, { root = "discord_bot" }]
+include = ["backend", "discord_bot"]
 exclude = ["**/venv", "**/migrations"]
