@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:13-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=journal
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "journal"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  backend:
+    image: ghcr.io/sandbox-pokhara/journal
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - postgres
+
+  discord_bot:
+    image: ghcr.io/sandbox-pokhara/journal-bot
+    restart: unless-stopped
+    env_file:
+      - ./discord_bot/.env
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
