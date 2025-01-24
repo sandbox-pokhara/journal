@@ -3,8 +3,8 @@ version: "3"
 tasks:
   build:
     cmds:
-      - docker build . -t ghcr.io/sandbox-pokhara/journal-bot
+      - docker build . -t ghcr.io/sandbox-pokhara/journal-discord-bot
 
   publish:
     cmds:
-      - docker image push ghcr.io/sandbox-pokhara/journal-bot
+      - docker image push ghcr.io/sandbox-pokhara/journal-discord-bot

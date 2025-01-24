@@ -18,7 +18,7 @@ services:
       timeout: 5s
 
   backend:
-    image: ghcr.io/sandbox-pokhara/journal
+    image: ghcr.io/sandbox-pokhara/journal-backend
     restart: unless-stopped
     ports:
       - "8000:8000"
@@ -28,7 +28,7 @@ services:
       - postgres
 
   discord_bot:
-    image: ghcr.io/sandbox-pokhara/journal-bot
+    image: ghcr.io/sandbox-pokhara/journal-discord-bot
     restart: unless-stopped
     env_file:
       - ./discord_bot/.env

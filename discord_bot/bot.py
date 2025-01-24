@@ -22,7 +22,7 @@ def main():
     # Set up bot intents
     intents.messages = True
     intents.message_content = True
-    bot.run(ENV.DISCORT_BOT_TOKEN)
+    bot.run(ENV.DISCORD_BOT_TOKEN)
 
 
 if __name__ == "__main__":

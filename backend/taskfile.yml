@@ -3,8 +3,8 @@ version: "3"
 tasks:
   build:
     cmds:
-      - docker build . -t ghcr.io/sandbox-pokhara/journal
+      - docker build . -t ghcr.io/sandbox-pokhara/journal-backend
 
   publish:
     cmds:
-      - docker image push ghcr.io/sandbox-pokhara/journal
+      - docker image push ghcr.io/sandbox-pokhara/journal-backend
