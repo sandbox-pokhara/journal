@@ -8,3 +8,7 @@ tasks:
   publish:
     cmds:
       - docker image push ghcr.io/sandbox-pokhara/journal-backend
+
+  deploy:
+    cmds:
+      - ssh andreu-ovh -t "docker service update --with-registry-auth --image ghcr.io/sandbox-pokhara/journal-backend journal_backend"
