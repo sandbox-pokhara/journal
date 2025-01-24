@@ -1,0 +1,31 @@
+services:
+  backend:
+    image: ghcr.io/sandbox-pokhara/journal-backend
+    ports:
+      - 8002:8000
+    deploy:
+      replicas: 2
+    environment:
+      - DEBUG=True
+      - POSTGRES_HOST=
+      - POSTGRES_USER=
+      - POSTGRES_DB=
+      - POSTGRES_PASSWORD=
+      - POSTGRES_PORT=
+      - ALLOWED_HOSTS=journal.sandbox.com.np
+      - CSRF_TRUSTED_ORIGINS=https://journal.sandbox.com.np
+      - SECRET_KEY=
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'wget --no-verbose --tries=1 --spider --header "Host: journal.sandbox.com.np" http://127.0.0.1:8000/admin/ || exit 1',
+        ]
+      start_period: 30s
+  discord_bot:
+    image: ghcr.io/sandbox-pokhara/journal-discord-bot
+    environment:
+      - DISCORD_BOT_TOKEN=
+      - BACKEND_URI=https://journal.sandbox.com.np
+    deploy:
+      replicas: 1
