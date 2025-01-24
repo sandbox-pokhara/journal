@@ -15,7 +15,7 @@ async def on_ready():
 
 @bot.command()
 async def hello(ctx: Context):  # type: ignore
-    await ctx.send("Hello, I am journal Bot.")
+    await ctx.send("Hello, I am journal bot.")
 
 
 def main():
