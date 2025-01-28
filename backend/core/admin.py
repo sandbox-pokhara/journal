@@ -1,3 +1,5 @@
+from typing import Type
+
 from django.contrib import admin
 from django.http import HttpRequest
 
@@ -5,7 +7,8 @@ from .models import CheckIn
 
 
 @admin.register(CheckIn)
-class CheckInAdmin(admin.ModelAdmin):
+class CheckInAdmin(admin.ModelAdmin[CheckIn]):
+    model: Type[CheckIn]
     list_display = (
         "id",
         "user",

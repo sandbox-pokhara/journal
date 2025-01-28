@@ -8,3 +8,7 @@ class CheckIn(models.Model):
 
     def __str__(self):
         return f"Check-in by {self.user} at {self.date_created}"
+
+
+class Absence(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
