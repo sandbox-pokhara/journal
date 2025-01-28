@@ -8,10 +8,12 @@ repos:
     rev: 5.13.2
     hooks:
       - id: isort
+        exclude: ^(backend/core/migrations/)
   - repo: https://github.com/psf/black
     rev: 24.10.0
     hooks:
       - id: black
+        exclude: ^(backend/core/migrations/)
   - repo: local
     hooks:
       - id: pyright
