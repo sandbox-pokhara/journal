@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.http import HttpRequest
 from django.utils import timezone
 from ninja import NinjaAPI
@@ -30,15 +32,13 @@ def create_check_ins(request: HttpRequest, data: CheckInSchema):
             detail="User doesn't exist. Contact your administrator."
         )
 
-    today = timezone.now().date()
+    eight_hours_ago = timezone.now() - timedelta(hours=8)
 
     checkin_count = CheckIn.objects.filter(
-        user=user, date_created__date=today
+        user=user, date_created__gte=eight_hours_ago
     ).count()
-    if checkin_count >= 2:
-        return 400, GenericSchema(
-            detail="You have already checked in twice today."
-        )
+    if checkin_count >= 1:
+        return 400, GenericSchema(detail="You have already checked in today.")
 
     CheckIn.objects.create(user=user)
     return GenericSchema(detail="Check-in successful!")

@@ -10,10 +10,10 @@ def get_default_token():
 
 class CheckIn(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_created = models.DateTimeField(auto_now_add=True)
+    check_in_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Check-in by {self.user} at {self.date_created}"
+        return f"check-in #{self.pk}"
 
 
 class Token(models.Model):
