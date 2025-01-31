@@ -9,12 +9,12 @@ class CheckInAdmin(admin.ModelAdmin[CheckIn]):
     list_display = (
         "id",
         "user",
-        "check_in_date",
+        "date_created",
     )
 
     search_fields = ("id",)
 
-    list_filter = ("check_in_date",)
+    list_filter = ("date_created",)
 
 
 @admin.register(Token)
