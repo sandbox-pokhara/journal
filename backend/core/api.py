@@ -24,26 +24,21 @@ api.add_router("/check-ins/", check_ins, tags=["check-ins"])
 )
 def create_check_ins(request: HttpRequest, data: CheckInSchema):
     try:
-        user, created = User.objects.get_or_create(username=data.nickname)
+        user = User.objects.get(username=data.nickname)
+    except User.DoesNotExist:
+        return 400, GenericSchema(
+            detail="User doesn't exist. Contact your administrator."
+        )
 
-        today = timezone.now().date()
+    today = timezone.now().date()
 
-        checkin_count = CheckIn.objects.filter(
-            user=user, date_created__date=today
-        ).count()
-        if checkin_count >= 1:
-            return 400, GenericSchema(
-                detail="You have already checked in today."
-            )
+    checkin_count = CheckIn.objects.filter(
+        user=user, date_created__date=today
+    ).count()
+    if checkin_count >= 2:
+        return 400, GenericSchema(
+            detail="You have already checked in twice today."
+        )
 
-        CheckIn.objects.create(user=user)
-
-        if created:
-            return GenericSchema(
-                detail="New user created and check-in successful!"
-            )
-        else:
-            return GenericSchema(detail="Check-in successful!")
-
-    except Exception as _:
-        return 500, GenericSchema(detail="An unexpected error occurred.")
+    CheckIn.objects.create(user=user)
+    return GenericSchema(detail="Check-in successful!")

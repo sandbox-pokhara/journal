@@ -9,7 +9,7 @@ from env import ENV
 
 BASE_URL = ENV.BACKEND_URI
 HEADERS = {
-    "Authorization": f"Bearer {ENV.AUTH_TOKEN}",
+    "Authorization": f"Bearer {ENV.BACKEND_AUTH_TOKEN}",
 }
 
 intents = discord.Intents.default()
@@ -19,11 +19,6 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 @bot.event
 async def on_ready():
     print(f"Bot is ready. Logged in as {bot.user}.")
-
-
-@bot.command()
-async def hello(ctx: Context):  # type: ignore
-    await ctx.send("Hello, I am journal bot.")
 
 
 @bot.command(name="check-in")
@@ -58,9 +53,10 @@ async def checkin(ctx: Context):  # type: ignore
                     color=discord.Color.green(),
                 )
             elif response.status_code == 400:
+                data = response.json()
                 embed = Embed(
                     title="❌ Oops!",
-                    description="You've already checked in today.",
+                    description=data["detail"],
                     color=discord.Color.orange(),
                 )
             elif response.status_code == 401:
