@@ -9,7 +9,7 @@ BASE_URL = ENV.BACKEND_URI
 HEADERS = {
     "Authorization": f"Bearer {ENV.BACKEND_AUTH_TOKEN}",
 }
-checkin_terms = [
+CHECKIN_TERMS = [
     "good morning",
     "good day",
     "good afternoon",
@@ -32,12 +32,12 @@ async def on_message(message: discord.Message):
         return
 
     if message.channel.id == int(ENV.CHECKIN_CHANNEL_ID):
-        if message.content.lower() in checkin_terms:
+        if message.content.lower() in CHECKIN_TERMS:
             await perform_checkin(message=message)
         else:
             embed = discord.Embed(
                 title="❌ Invalid Check-In Term",
-                description=f"Sorry,It's nor valid format. That.\nValid check-in terms are: {', '.join(checkin_terms)}",
+                description=f"Sorry,It's nor valid format. That.\nValid check-in terms are: {', '.join(CHECKIN_TERMS)}",
                 color=discord.Color.red(),
             )
             await message.channel.send(embed=embed)
