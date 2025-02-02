@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 from discord_bot.commands.absences import create_absence
 from discord_bot.commands.check_ins import create_check_in
 from discord_bot.commands.holidays import create_holiday
+from discord_bot.commands.holidays import list_upcoming_holidays
 from discord_bot.commands.journals import create_journal
 
 
@@ -57,7 +58,10 @@ class MyClient(discord.Client):
 
         # handle holidays
         if message.channel.id == ENV.HOLIDAY_DISCORD_CHANNEL_ID:
-            return await create_holiday(user, message)
+            if message.content == "list upcoming":
+                return await list_upcoming_holidays(message)
+            else:
+                return await create_holiday(user, message)
 
 
 def main():

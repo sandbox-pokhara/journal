@@ -19,7 +19,11 @@ def get_date_from_message(message: str):
     # Check for a date pattern (YYYY-MM-DD)
     date_match = re.search(r"\b\d{4}-\d{2}-\d{2}\b", message)
     if date_match:
-        return datetime.strptime(date_match.group(), "%Y-%m-%d").date()
+        try:
+            return datetime.strptime(date_match.group(), "%Y-%m-%d").date()
+        except ValueError:
+            # Return today on invalid date
+            return today
 
     # Default to today if no valid date is found
     return today
