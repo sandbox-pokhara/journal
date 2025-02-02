@@ -1,4 +1,5 @@
 from django.contrib import admin
+from djangoql.admin import DjangoQLSearchMixin  # type: ignore
 
 from .models import Absence
 from .models import CheckIn
@@ -8,7 +9,7 @@ from .models import Token
 
 
 @admin.register(CheckIn)
-class CheckInAdmin(admin.ModelAdmin[CheckIn]):
+class CheckInAdmin(DjangoQLSearchMixin, admin.ModelAdmin[CheckIn]):
     list_display = (
         "id",
         "user",
@@ -19,7 +20,7 @@ class CheckInAdmin(admin.ModelAdmin[CheckIn]):
 
 
 @admin.register(Absence)
-class AbsenceAdmin(admin.ModelAdmin[Absence]):
+class AbsenceAdmin(DjangoQLSearchMixin, admin.ModelAdmin[Absence]):
     list_display = (
         "id",
         "user",
@@ -31,7 +32,7 @@ class AbsenceAdmin(admin.ModelAdmin[Absence]):
 
 
 @admin.register(Journal)
-class JournalAdmin(admin.ModelAdmin[Journal]):
+class JournalAdmin(DjangoQLSearchMixin, admin.ModelAdmin[Journal]):
     list_display = (
         "id",
         "user",
@@ -42,7 +43,7 @@ class JournalAdmin(admin.ModelAdmin[Journal]):
 
 
 @admin.register(Holiday)
-class HolidayAdmin(admin.ModelAdmin[Holiday]):
+class HolidayAdmin(DjangoQLSearchMixin, admin.ModelAdmin[Holiday]):
     list_display = (
         "id",
         "description",
@@ -54,7 +55,7 @@ class HolidayAdmin(admin.ModelAdmin[Holiday]):
 
 
 @admin.register(Token)
-class TokenAdmin(admin.ModelAdmin[Token]):
+class TokenAdmin(DjangoQLSearchMixin, admin.ModelAdmin[Token]):
     list_display = ["key", "user", "date_created"]
     fields = ("user",)
     autocomplete_fields = ["user"]

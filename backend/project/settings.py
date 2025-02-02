@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # Custom apps
     "core",
     # Third-party apps
+    "djangoql",
     # Django default apps
     "django.contrib.admin",
     "django.contrib.auth",
