@@ -14,6 +14,7 @@ class Environment(BaseSettings):
     CSRF_TRUSTED_ORIGINS: str = "http://127.0.0.1:8000"
     SECRET_KEY: str = "STRONG_KEY"
     DISCORD_BOT_TOKEN: str = ""
+    ABSENCES_ALLOWED_PER_MONTH: int = 2
 
 
 ENV = Environment()
