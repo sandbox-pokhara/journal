@@ -7,6 +7,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY manage.py .
+COPY bot.py .
 COPY project project
 COPY core core
 EXPOSE 8000

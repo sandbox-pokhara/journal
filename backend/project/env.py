@@ -13,6 +13,7 @@ class Environment(BaseSettings):
     ALLOWED_HOSTS: str = "*"
     CSRF_TRUSTED_ORIGINS: str = "http://127.0.0.1:8000"
     SECRET_KEY: str = "STRONG_KEY"
+    DISCORD_BOT_TOKEN: str = ""
 
 
 ENV = Environment()
