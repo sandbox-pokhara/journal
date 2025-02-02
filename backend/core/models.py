@@ -11,9 +11,39 @@ def get_default_token():
 class CheckIn(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
+    message = models.TextField(default="")
 
     def __str__(self):
-        return f"check-in #{self.pk}"
+        return f"CheckIn #{self.pk}"
+
+
+class Absence(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    days = models.PositiveSmallIntegerField(default=1)
+    date_created = models.DateTimeField(auto_now_add=True)
+    message = models.TextField(default="")
+
+    def __str__(self):
+        return f"Absence #{self.pk}"
+
+
+class Journal(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(auto_now_add=True)
+    message = models.TextField(default="")
+
+    def __str__(self):
+        return f"Journal #{self.pk}"
+
+
+class Holiday(models.Model):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date = models.DateField()
+    description = models.TextField(default="")
+
+    def __str__(self):
+        return self.description
 
 
 class Token(models.Model):
