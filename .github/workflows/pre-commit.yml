@@ -19,12 +19,15 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Python dependencies
+      - name: Install project dependencies for pyright check
         run: |
+          python -m venv venv
+          source venv/bin/activate
           python -m pip install --upgrade pip
-          pip install -r requirements.dev.txt
+          pip install pre-commit
           pip install -r backend/requirements.txt
-          pip install -r discord_bot/requirements.txt
 
       - name: Run pre-commit hooks
-        run: pre-commit run --all-files
+        run: |
+          source venv/bin/activate
+          pre-commit run --all-files

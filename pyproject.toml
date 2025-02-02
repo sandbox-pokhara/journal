@@ -12,6 +12,8 @@ extend-exclude = "migrations"
 
 
 [tool.pyright]
+venvPath = "."
+venv = "venv"
 typeCheckingMode = "strict"
 executionEnvironments = [{ root = "backend" }]
 include = ["backend"]
