@@ -34,7 +34,7 @@ services:
       - ./discord_bot/.env
     depends_on:
       - backend
-    command: python bot.py
+    command: python -m discord_bot
 
 volumes:
   postgres_data:
