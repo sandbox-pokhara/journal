@@ -12,7 +12,7 @@ cd journal
 ```
 
 ### Setup the .env file
-Create a `.env` file inside the backend and discord_bot directories according to the provided `sample.env` file.
+Create a `.env` file inside the backend directories according to the provided `sample.env` file.
 
 ### Build and run the containers
 Run the following command to build and start the containers:
