@@ -1,5 +1,4 @@
 discord.py==2.*
-django-ninja==1.*
 django-stubs-ext
 django-types
 Django==5.*
