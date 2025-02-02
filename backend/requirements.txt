@@ -4,6 +4,8 @@ django-types
 djangoql
 Django==5.*
 gunicorn
+httpx
+pydantic-settings==2.*
 psycopg2-binary==2.*
 pydantic-settings==2.*
 pydantic==2.*
