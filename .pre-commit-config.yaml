@@ -12,11 +12,7 @@ repos:
     rev: 24.10.0
     hooks:
       - id: black
-  - repo: local
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.393
     hooks:
       - id: pyright
-        name: pyright
-        entry: pyright
-        language: system
-        types: [python]
-        pass_filenames: false # Pyright analyzes the entire project, not individual files

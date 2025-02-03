@@ -15,6 +15,10 @@ class Environment(BaseSettings):
     SECRET_KEY: str = "STRONG_KEY"
     DISCORD_BOT_TOKEN: str = "bot-token"
     ABSENCES_ALLOWED_PER_MONTH: int = 2
+    CHECK_IN_DISCORD_CHANNEL_ID: int = 0
+    ABSENCE_DISCORD_CHANNEL_ID: int = 0
+    JOURNAL_DISCORD_CHANNEL_ID: int = 0
+    HOLIDAY_DISCORD_CHANNEL_ID: int = 0
 
 
 ENV = Environment()
