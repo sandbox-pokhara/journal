@@ -13,6 +13,23 @@ async def create_absence(user: User, message: discord.Message):
 
     if not is_break and not is_partial:
         now = timezone.now()
+
+        existing_today = await Absence.objects.filter(
+            user=user,
+            date_created__date=now.date(),
+        ).aexists()
+
+        if existing_today:
+            return await message.channel.send(
+                embed=discord.Embed(
+                    title="❌ Oops!",
+                    description=(
+                        "You have already submitted your absence for today."
+                    ),
+                    color=discord.Color.orange(),
+                )
+            )
+
         start_of_month = now.replace(day=1)
         total_absences = (
             await Absence.objects.filter(
