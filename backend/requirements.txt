@@ -6,4 +6,5 @@ gunicorn
 psycopg2-binary==2.*
 pydantic-settings==2.*
 pydantic==2.*
+tabulate
 whitenoise==6.*
