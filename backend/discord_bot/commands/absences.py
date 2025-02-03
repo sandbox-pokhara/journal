@@ -21,16 +21,30 @@ async def create_absence(user: User, message: discord.Message):
         return await message.channel.send(
             embed=discord.Embed(
                 title="❌ Oops!",
-                description=f"You have exceeded your permitted number of absences ({ENV.ABSENCES_ALLOWED_PER_MONTH}) for this month.",
+                description=(
+                    "You have exceeded your permitted number of absences"
+                    f" ({ENV.ABSENCES_ALLOWED_PER_MONTH}) for this month."
+                ),
                 color=discord.Color.orange(),
             )
         )
 
-    absence = await Absence.objects.acreate(user=user, message=message.content)
+    is_break = "break" in message.content.lower()
+    is_partial = "partial" in message.content.lower()
+    absence = await Absence.objects.acreate(
+        user=user,
+        message=message.content,
+        is_break=is_break,
+        is_partial=is_partial,
+    )
     return await message.channel.send(
         embed=discord.Embed(
             title="🎉 Absence Submitted!",
-            description=f"Absence was created successfully for user {user.username} on date {absence.date_created.date()}.",
+            description=(
+                f"Absence (is_partial={is_partial}, is_break={is_break}) was"
+                f" created successfully for user {user.username} on date"
+                f" {absence.date_created.date()}."
+            ),
             color=discord.Color.green(),
         )
     )

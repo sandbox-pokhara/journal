@@ -24,10 +24,16 @@ class AbsenceAdmin(admin.ModelAdmin[Absence]):
         "id",
         "user",
         "message",
+        "is_partial",
+        "is_break",
         "days",
         "date_created",
     )
-    list_filter = ("date_created",)
+    list_filter = (
+        "date_created",
+        "is_partial",
+        "is_break",
+    )
 
 
 @admin.register(Journal)
