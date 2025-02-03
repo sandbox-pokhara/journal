@@ -40,7 +40,9 @@ class MyClient(discord.Client):
             return await message.channel.send(
                 embed=discord.Embed(
                     title="❌ Oops!",
-                    description="User doesn't exist. Contact your administrator.",
+                    description=(
+                        "User doesn't exist. Contact your administrator."
+                    ),
                     color=discord.Color.orange(),
                 )
             )
@@ -51,7 +53,7 @@ class MyClient(discord.Client):
 
         # handle absences
         if message.channel.id == ENV.ABSENCE_DISCORD_CHANNEL_ID:
-            if message.content == "list absences":
+            if message.content.lower() == "list absences":
                 return await list_absences(user, message)
             else:
                 return await create_absence(user, message)
@@ -62,7 +64,7 @@ class MyClient(discord.Client):
 
         # handle holidays
         if message.channel.id == ENV.HOLIDAY_DISCORD_CHANNEL_ID:
-            if message.content == "list upcoming":
+            if message.content.lower() == "list upcoming":
                 return await list_upcoming_holidays(message)
             else:
                 return await create_holiday(user, message)

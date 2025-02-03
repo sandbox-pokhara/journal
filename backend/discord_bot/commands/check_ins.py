@@ -26,7 +26,10 @@ async def create_check_in(user: User, message: discord.Message):
     return await message.channel.send(
         embed=discord.Embed(
             title="🎉 Check-In Successful!",
-            description=f"User {check_in.user.username} checked in at {check_in.date_created.date()}.",
+            description=(
+                f"User {check_in.user.username} checked in at"
+                f" {check_in.date_created.date()}."
+            ),
             color=discord.Color.green(),
         )
     )

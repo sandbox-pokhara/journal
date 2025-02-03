@@ -26,7 +26,10 @@ async def create_holiday(user: User, message: discord.Message):
     return await message.channel.send(
         embed=discord.Embed(
             title="🎉 Holiday Created!",
-            description=f"Holiday on date {holiday.date} created by {holiday.created_by}.",
+            description=(
+                f"Holiday on date {holiday.date} created by"
+                f" {holiday.created_by}."
+            ),
             color=discord.Color.green(),
         )
     )

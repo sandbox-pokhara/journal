@@ -9,7 +9,10 @@ async def create_journal(user: User, message: discord.Message):
     return await message.channel.send(
         embed=discord.Embed(
             title="🎉 Journal Created!",
-            description=f"A journal was created by user {user.username} on date {journal.date_created.date()}.",
+            description=(
+                f"A journal was created by user {user.username} on date"
+                f" {journal.date_created.date()}."
+            ),
             color=discord.Color.green(),
         )
     )
