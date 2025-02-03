@@ -13,6 +13,7 @@ django.setup()
 from django.contrib.auth.models import User
 
 from discord_bot.commands.absences import create_absence
+from discord_bot.commands.absences import list_absences
 from discord_bot.commands.check_ins import create_check_in
 from discord_bot.commands.holidays import create_holiday
 from discord_bot.commands.holidays import list_upcoming_holidays
@@ -50,7 +51,10 @@ class MyClient(discord.Client):
 
         # handle absences
         if message.channel.id == ENV.ABSENCE_DISCORD_CHANNEL_ID:
-            return await create_absence(user, message)
+            if message.content == "list absences":
+                return await list_absences(user, message)
+            else:
+                return await create_absence(user, message)
 
         # handle journals
         if message.channel.id == ENV.JOURNAL_DISCORD_CHANNEL_ID:

@@ -34,3 +34,23 @@ async def create_absence(user: User, message: discord.Message):
             color=discord.Color.green(),
         )
     )
+
+
+async def list_absences(user: User, message: discord.Message):
+    absences = Absence.objects.filter(user=user)
+    if await absences.acount() <= 0:
+        content = "No absences found for the user."
+    else:
+        content = "\n".join(
+            [
+                f"{a.date_created.date()}, {a.days} day(s), {a.message}"
+                async for a in absences
+            ]
+        )
+    return await message.channel.send(
+        embed=discord.Embed(
+            title=f"🎉 Absences for User {user.username}!",
+            description=content,
+            color=discord.Color.green(),
+        )
+    )
