@@ -1,6 +1,7 @@
 discord.py==2.*
 django-stubs-ext
 django-types
+djangoql
 Django==5.*
 gunicorn
 psycopg2-binary==2.*
