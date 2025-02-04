@@ -13,26 +13,13 @@ async def create_holiday(user: User, message: discord.Message):
 
     if await Holiday.objects.filter(date=date).aexists():
         return await message.channel.send(
-            embed=discord.Embed(
-                title="❌ Oops!",
-                description=f"Holiday already exists for date {date}.",
-                color=discord.Color.orange(),
-            )
+            f"❌ Oops!. Holiday already exists for date {date}."
         )
 
-    holiday = await Holiday.objects.acreate(
+    await Holiday.objects.acreate(
         created_by=user, description=message.content, date=date
     )
-    return await message.channel.send(
-        embed=discord.Embed(
-            title="🎉 Holiday Created!",
-            description=(
-                f"Holiday on date {holiday.date} created by"
-                f" {holiday.created_by}."
-            ),
-            color=discord.Color.green(),
-        )
-    )
+    await message.add_reaction("✅")
 
 
 async def list_upcoming_holidays(message: discord.Message):

@@ -25,33 +25,17 @@ async def create_absence(user: User, message: discord.Message):
 
         if total_absences >= ENV.ABSENCES_ALLOWED_PER_MONTH:
             return await message.channel.send(
-                embed=discord.Embed(
-                    title="❌ Oops!",
-                    description=(
-                        "You have exceeded your permitted number of absences"
-                        f" ({ENV.ABSENCES_ALLOWED_PER_MONTH}) for this month."
-                    ),
-                    color=discord.Color.orange(),
-                )
+                "❌ Oops!. You have exceeded your permitted number of"
+                f" absences ({ENV.ABSENCES_ALLOWED_PER_MONTH}) this month."
             )
 
-    absence = await Absence.objects.acreate(
+    await Absence.objects.acreate(
         user=user,
         message=message.content,
         is_break=is_break,
         is_partial=is_partial,
     )
-    return await message.channel.send(
-        embed=discord.Embed(
-            title="🎉 Absence Submitted!",
-            description=(
-                f"Absence (is_partial={is_partial}, is_break={is_break}) was"
-                f" created successfully for user {user.username} on date"
-                f" {absence.date_created.date()}."
-            ),
-            color=discord.Color.green(),
-        )
-    )
+    await message.add_reaction("👍")
 
 
 async def list_absences(user: User, message: discord.Message):
