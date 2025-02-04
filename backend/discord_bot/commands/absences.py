@@ -29,21 +29,11 @@ async def create_absence(user: User, message: discord.Message):
             )
         )
 
-    absence = await Absence.objects.acreate(
+    await Absence.objects.acreate(
         user=user,
         message=message.content,
     )
-    return await message.channel.send(
-        embed=discord.Embed(
-            title="🎉 Absence Submitted!",
-            description=(
-                "Absence was"
-                f" created successfully for user {user.username} on date"
-                f" {absence.date_created.date()}."
-            ),
-            color=discord.Color.green(),
-        )
-    )
+    return await message.add_reaction("🫡")
 
 
 async def list_absences(user: User, message: discord.Message):

@@ -20,19 +20,10 @@ async def create_holiday(user: User, message: discord.Message):
             )
         )
 
-    holiday = await Holiday.objects.acreate(
+    await Holiday.objects.acreate(
         created_by=user, description=message.content, date=date
     )
-    return await message.channel.send(
-        embed=discord.Embed(
-            title="🎉 Holiday Created!",
-            description=(
-                f"Holiday on date {holiday.date} created by"
-                f" {holiday.created_by}."
-            ),
-            color=discord.Color.green(),
-        )
-    )
+    return await message.add_reaction("👍")
 
 
 async def list_upcoming_holidays(message: discord.Message):

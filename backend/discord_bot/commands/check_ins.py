@@ -26,19 +26,8 @@ async def create_check_in(user: User, message: discord.Message):
             )
         )
 
-    check_in = await CheckIn.objects.acreate(
-        user=user, message=message.content
-    )
-    return await message.channel.send(
-        embed=discord.Embed(
-            title="🎉 Check-In Successful!",
-            description=(
-                f"User {check_in.user.username} checked in at"
-                f" {check_in.date_created.date()}."
-            ),
-            color=discord.Color.green(),
-        )
-    )
+    await CheckIn.objects.acreate(user=user, message=message.content)
+    return await message.add_reaction("👋")
 
 
 async def attendance_summary(message: discord.Message):
