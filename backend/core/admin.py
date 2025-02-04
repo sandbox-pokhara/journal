@@ -25,16 +25,10 @@ class AbsenceAdmin(DjangoQLSearchMixin, admin.ModelAdmin[Absence]):
         "id",
         "user",
         "message",
-        "is_partial",
-        "is_break",
         "days",
         "date_created",
     )
-    list_filter = (
-        "date_created",
-        "is_partial",
-        "is_break",
-    )
+    list_filter = ("date_created",)
 
 
 @admin.register(Journal)

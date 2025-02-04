@@ -8,44 +8,36 @@ from project.env import ENV
 
 
 async def create_absence(user: User, message: discord.Message):
-    is_break = "break" in message.content.lower()
-    is_partial = "partial" in message.content.lower()
+    now = timezone.now()
+    start_of_month = now.replace(day=1)
+    total_absences = (
+        await Absence.objects.filter(
+            user=user,
+            date_created__gt=start_of_month,
+        ).aaggregate(Sum("days"))
+    )["days__sum"] or 0
 
-    if not is_break and not is_partial:
-        now = timezone.now()
-        start_of_month = now.replace(day=1)
-        total_absences = (
-            await Absence.objects.filter(
-                is_partial=False,
-                is_break=False,
-                user=user,
-                date_created__gt=start_of_month,
-            ).aaggregate(Sum("days"))
-        )["days__sum"] or 0
-
-        if total_absences >= ENV.ABSENCES_ALLOWED_PER_MONTH:
-            return await message.channel.send(
-                embed=discord.Embed(
-                    title="❌ Oops!",
-                    description=(
-                        "You have exceeded your permitted number of absences"
-                        f" ({ENV.ABSENCES_ALLOWED_PER_MONTH}) for this month."
-                    ),
-                    color=discord.Color.orange(),
-                )
+    if total_absences >= ENV.ABSENCES_ALLOWED_PER_MONTH:
+        return await message.channel.send(
+            embed=discord.Embed(
+                title="❌ Oops!",
+                description=(
+                    "You have exceeded your permitted number of absences"
+                    f" ({ENV.ABSENCES_ALLOWED_PER_MONTH}) for this month."
+                ),
+                color=discord.Color.orange(),
             )
+        )
 
     absence = await Absence.objects.acreate(
         user=user,
         message=message.content,
-        is_break=is_break,
-        is_partial=is_partial,
     )
     return await message.channel.send(
         embed=discord.Embed(
             title="🎉 Absence Submitted!",
             description=(
-                f"Absence (is_partial={is_partial}, is_break={is_break}) was"
+                "Absence was"
                 f" created successfully for user {user.username} on date"
                 f" {absence.date_created.date()}."
             ),
