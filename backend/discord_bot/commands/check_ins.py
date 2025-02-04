@@ -53,12 +53,7 @@ async def attendance_summary(message: discord.Message):
             date__lte=localdate(timezone.now()),
         ).acount()
         check_ins = await CheckIn.objects.filter(user=u).acount()
-        absences = await Absence.objects.filter(
-            user=u, is_partial=False, is_break=False
-        ).acount()
-        partial_absences = (
-            await Absence.objects.filter(user=u).acount() - absences
-        )
+        absences = await Absence.objects.filter(user=u).acount()
         days_to_cover = total_days - holidays - check_ins - absences
         table.append(
             [
@@ -66,7 +61,6 @@ async def attendance_summary(message: discord.Message):
                 total_days,
                 check_ins,
                 absences,
-                partial_absences,
                 holidays,
                 days_to_cover,
                 "yes" if days_to_cover <= 0 else "no",
@@ -80,7 +74,6 @@ async def attendance_summary(message: discord.Message):
             "total_days",
             "check_ins",
             "absences",
-            "partial_absences",
             "holidays",
             "days_to_cover",
             "is_on_track",
