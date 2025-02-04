@@ -22,8 +22,6 @@ class Absence(models.Model):
     days = models.PositiveSmallIntegerField(default=1)
     date_created = models.DateTimeField(auto_now_add=True)
     message = models.TextField(default="", blank=True)
-    is_partial = models.BooleanField(default=False)
-    is_break = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Absence #{self.pk}"
