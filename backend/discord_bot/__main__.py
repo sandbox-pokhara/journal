@@ -1,9 +1,12 @@
+import logging
 import os
 
 import discord
 import django
 
 from project.env import ENV
+
+logger = logging.getLogger("discord")
 
 # setup django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
@@ -22,56 +25,72 @@ from discord_bot.commands.journals import create_journal
 
 
 class MyClient(discord.Client):
+    async def on_ready(self):
+        logger.info(f"Logged on as {self.user}!")
 
     async def on_message(self, message: discord.Message):
-        # don't respond to ourselves
-        if message.author == self.user:
-            return
-
-        # parse nickname
-        if isinstance(message.author, discord.Member):
-            nickname: str = message.author.nick or message.author.name
-        else:
-            nickname: str = message.author.name
-
-        # check if user exists
         try:
-            user = await User.objects.aget(username=nickname)
-        except User.DoesNotExist:
+            # don't respond to ourselves
+            if message.author == self.user:
+                return
+
+            # parse nickname
+            if isinstance(message.author, discord.Member):
+                nickname: str = message.author.nick or message.author.name
+            else:
+                nickname: str = message.author.name
+
+            # check if user exists
+            try:
+                user = await User.objects.aget(username=nickname)
+            except User.DoesNotExist:
+                return await message.channel.send(
+                    embed=discord.Embed(
+                        title="❌ Oops!",
+                        description=(
+                            "User doesn't exist. Contact your administrator."
+                        ),
+                        color=discord.Color.orange(),
+                    )
+                )
+
+            # handle check ins
+            if message.channel.id == ENV.CHECK_IN_DISCORD_CHANNEL_ID:
+                if message.content.lower() == "summary":
+                    return await attendance_summary(message)
+                else:
+                    return await create_check_in(user, message)
+
+            # handle absences
+            if message.channel.id == ENV.ABSENCE_DISCORD_CHANNEL_ID:
+                if message.content.lower() == "list absences":
+                    return await list_absences(user, message)
+                else:
+                    return await create_absence(user, message)
+
+            # handle journals
+            if message.channel.id == ENV.JOURNAL_DISCORD_CHANNEL_ID:
+                return await create_journal(user, message)
+
+            # handle holidays
+            if message.channel.id == ENV.HOLIDAY_DISCORD_CHANNEL_ID:
+                if message.content.lower() == "list upcoming":
+                    return await list_upcoming_holidays(message)
+                else:
+                    return await create_holiday(user, message)
+        except Exception:
+            logger.exception(
+                "An unexpected error occured. Please check the logs."
+            )
             return await message.channel.send(
                 embed=discord.Embed(
                     title="❌ Oops!",
                     description=(
-                        "User doesn't exist. Contact your administrator."
+                        "An unexcepted error occured. Please check the logs."
                     ),
                     color=discord.Color.orange(),
                 )
             )
-
-        # handle check ins
-        if message.channel.id == ENV.CHECK_IN_DISCORD_CHANNEL_ID:
-            if message.content.lower() == "summary":
-                return await attendance_summary(message)
-            else:
-                return await create_check_in(user, message)
-
-        # handle absences
-        if message.channel.id == ENV.ABSENCE_DISCORD_CHANNEL_ID:
-            if message.content.lower() == "list absences":
-                return await list_absences(user, message)
-            else:
-                return await create_absence(user, message)
-
-        # handle journals
-        if message.channel.id == ENV.JOURNAL_DISCORD_CHANNEL_ID:
-            return await create_journal(user, message)
-
-        # handle holidays
-        if message.channel.id == ENV.HOLIDAY_DISCORD_CHANNEL_ID:
-            if message.content.lower() == "list upcoming":
-                return await list_upcoming_holidays(message)
-            else:
-                return await create_holiday(user, message)
 
 
 def main():

@@ -44,7 +44,7 @@ async def list_upcoming_holidays(message: discord.Message):
     content = "\n".join([f"{h.date}: {h.description}" async for h in holidays])
     return await message.channel.send(
         embed=discord.Embed(
-            title="🎉 Upcomimg Holidays!",
+            title="🎉 Upcoming Holidays!",
             description=content,
             color=discord.Color.green(),
         )
