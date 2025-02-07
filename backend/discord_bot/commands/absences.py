@@ -4,6 +4,7 @@ from django.db.models import Sum
 from django.utils import timezone
 
 from core.models import Absence
+from core.models import Message
 from project.env import ENV
 
 
@@ -29,10 +30,11 @@ async def create_absence(user: User, message: discord.Message):
             )
         )
 
-    await Absence.objects.acreate(
+    absence = await Absence.objects.acreate(
         user=user,
         message=message.content,
     )
+    await Message.objects.acreate(id=message.id, absence=absence)
     return await message.add_reaction("🫡")
 
 

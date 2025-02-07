@@ -46,6 +46,38 @@ class Holiday(models.Model):
         return self.description
 
 
+class Message(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    journal = models.ForeignKey(
+        Journal,
+        on_delete=models.CASCADE,
+        related_name="message_journal",
+        null=True,
+        blank=True,
+    )
+    absence = models.ForeignKey(
+        Absence,
+        on_delete=models.CASCADE,
+        related_name="message_absence",
+        null=True,
+        blank=True,
+    )
+    check_in = models.ForeignKey(
+        CheckIn,
+        on_delete=models.CASCADE,
+        related_name="message_check_in",
+        null=True,
+        blank=True,
+    )
+    holiday = models.ForeignKey(
+        Holiday,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="message_holiday",
+        blank=True,
+    )
+
+
 class Token(models.Model):
     key = models.CharField(
         max_length=255, unique=True, default=get_default_token

@@ -10,6 +10,7 @@ from tabulate import tabulate
 from core.models import Absence
 from core.models import CheckIn
 from core.models import Holiday
+from core.models import Message
 
 
 async def create_check_in(user: User, message: discord.Message):
@@ -26,7 +27,11 @@ async def create_check_in(user: User, message: discord.Message):
             )
         )
 
-    await CheckIn.objects.acreate(user=user, message=message.content)
+    check_in = await CheckIn.objects.acreate(
+        user=user, message=message.content
+    )
+    await Message.objects.acreate(id=message.id, check_in=check_in)
+
     return await message.add_reaction("👋")
 
 
