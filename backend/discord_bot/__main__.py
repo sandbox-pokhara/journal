@@ -30,6 +30,13 @@ from discord_bot.commands.journals import create_journal
 
 from .utils import get_date_from_message
 
+EDIT_DELETE_ENABLED_CHANNELS = [
+    ENV.CHECK_IN_DISCORD_CHANNEL_ID,
+    ENV.ABSENCE_DISCORD_CHANNEL_ID,
+    ENV.HOLIDAY_DISCORD_CHANNEL_ID,
+    ENV.JOURNAL_DISCORD_CHANNEL_ID,
+]
+
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -37,6 +44,9 @@ class MyClient(discord.Client):
 
     async def on_message_delete(self, message: discord.Message):
         try:
+            if message.channel.id not in EDIT_DELETE_ENABLED_CHANNELS:
+                return
+
             message_record = await Message.objects.aget(id=message.id)
 
             check_in_id = getattr(message_record, "check_in_id", None)
@@ -78,6 +88,9 @@ class MyClient(discord.Client):
         self, before: discord.Message, after: discord.Message
     ):
         try:
+            if after.channel.id not in EDIT_DELETE_ENABLED_CHANNELS:
+                return
+
             updated_message = after.content
             message_record = await Message.objects.aget(id=after.id)
 
