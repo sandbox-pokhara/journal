@@ -49,30 +49,12 @@ async def attendance_summary(message: discord.Message):
         check_ins = await CheckIn.objects.filter(user=u).acount()
         absences = await Absence.objects.filter(user=u).acount()
         days_to_cover = total_days - holidays - check_ins - absences
-        table.append(
-            [
-                u.username,
-                total_days,
-                check_ins,
-                absences,
-                holidays,
-                days_to_cover,
-                "yes" if days_to_cover <= 0 else "no",
-            ]
-        )
 
+        table.append([u.username, f"{check_ins}/{absences}/{days_to_cover}"])
     table_str = tabulate(
         table,
-        headers=[
-            "username",
-            "total_days",
-            "check_ins",
-            "absences",
-            "holidays",
-            "days_to_cover",
-            "is_on_track",
-        ],
+        headers=["username", "result"],
         tablefmt="rounded_outline",
     )
-
-    return await message.channel.send(f"```{table_str}```")
+    info = "\nresult = check-ins/absences/days-to-cover\n"
+    await message.channel.send(f"```{table_str}{info}```")

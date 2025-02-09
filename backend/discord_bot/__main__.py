@@ -149,10 +149,7 @@ class MyClient(discord.Client):
 
             # handle check ins
             if message.channel.id == ENV.CHECK_IN_DISCORD_CHANNEL_ID:
-                if message.content.lower() == "summary":
-                    return await attendance_summary(message)
-                else:
-                    return await create_check_in(user, message)
+                return await create_check_in(user, message)
 
             # handle absences
             if message.channel.id == ENV.ABSENCE_DISCORD_CHANNEL_ID:
@@ -167,10 +164,14 @@ class MyClient(discord.Client):
 
             # handle holidays
             if message.channel.id == ENV.HOLIDAY_DISCORD_CHANNEL_ID:
+                return await create_holiday(user, message)
+
+            if message.channel.id == ENV.SUMMARY_DISCORD_CHANNEL_ID:
                 if message.content.lower() == "list upcoming":
                     return await list_upcoming_holidays(message)
                 else:
-                    return await create_holiday(user, message)
+                    return await attendance_summary(message)
+
         except Exception:
             logger.exception(
                 "An unexpected error occured. Please check the logs."
