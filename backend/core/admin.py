@@ -5,6 +5,7 @@ from .models import Absence
 from .models import CheckIn
 from .models import Holiday
 from .models import Journal
+from .models import Message
 from .models import Token
 
 
@@ -52,6 +53,17 @@ class HolidayAdmin(DjangoQLSearchMixin, admin.ModelAdmin[Holiday]):
         "date_created",
     )
     list_filter = ("date_created",)
+
+
+@admin.register(Message)
+class MessageAdmin(DjangoQLSearchMixin, admin.ModelAdmin[Message]):
+    list_display = (
+        "id",
+        "check_in",
+        "absence",
+        "holiday",
+        "journal",
+    )
 
 
 @admin.register(Token)

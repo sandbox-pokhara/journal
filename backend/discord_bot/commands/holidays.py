@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from core.models import Holiday
+from core.models import Message
 from discord_bot.utils import get_date_from_message
 
 
@@ -20,9 +21,11 @@ async def create_holiday(user: User, message: discord.Message):
             )
         )
 
-    await Holiday.objects.acreate(
+    holiday = await Holiday.objects.acreate(
         created_by=user, description=message.content, date=date
     )
+    await Message.objects.acreate(id=message.id, holiday=holiday)
+
     return await message.add_reaction("👍")
 
 
