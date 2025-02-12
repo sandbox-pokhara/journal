@@ -35,26 +35,44 @@ async def create_check_in(user: User, message: discord.Message):
     return await message.add_reaction("👋")
 
 
-async def attendance_summary(message: discord.Message):
+async def attendance_summary_and_holidays(message: discord.Message):
+    # upcoming holiday
+    today = timezone.localtime(timezone.now()).date()
 
+    holidays = Holiday.objects.filter(
+        date__gte=today, date__lt=today + timedelta(days=30)
+    )
+    content = "\n".join([f"{h.date}: {h.description}" async for h in holidays])
+
+    # attendence table
     table: list[list[Any]] = []
     async for u in User.objects.all():
         total_days = (
             localdate(timezone.now()) - localdate(u.date_joined)
         ).days + 1
-        holidays = await Holiday.objects.filter(
+        holidays_count = await Holiday.objects.filter(
             date__gte=localdate(u.date_joined),
             date__lte=localdate(timezone.now()),
         ).acount()
         check_ins = await CheckIn.objects.filter(user=u).acount()
         absences = await Absence.objects.filter(user=u).acount()
-        days_to_cover = total_days - holidays - check_ins - absences
+        days_to_cover = total_days - holidays_count - check_ins - absences
 
         table.append([u.username, f"{check_ins}/{absences}/{days_to_cover}"])
-    table_str = tabulate(
+    attendance_table = tabulate(
         table,
         headers=["username", "result"],
         tablefmt="rounded_outline",
     )
-    info = "\nresult = check-ins/absences/days-to-cover\n"
-    await message.channel.send(f"```{table_str}{info}```")
+
+    attendance_info = "\nresult = check-ins/absences/days-to-cover\n"
+    embed = discord.Embed(
+        title="🎉 Upcoming Holidays!",
+        description=content,
+        color=discord.Color.green(),
+    )
+
+    await message.channel.send(
+        f"```{attendance_table}{attendance_info}```-",  # for small separation
+        embed=embed,
+    )

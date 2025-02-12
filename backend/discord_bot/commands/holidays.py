@@ -1,8 +1,5 @@
-from datetime import timedelta
-
 import discord
 from django.contrib.auth.models import User
-from django.utils import timezone
 
 from core.models import Holiday
 from core.models import Message
@@ -27,19 +24,3 @@ async def create_holiday(user: User, message: discord.Message):
     await Message.objects.acreate(id=message.id, holiday=holiday)
 
     return await message.add_reaction("👍")
-
-
-async def list_upcoming_holidays(message: discord.Message):
-    today = timezone.localtime(timezone.now()).date()
-
-    holidays = Holiday.objects.filter(
-        date__gte=today, date__lt=today + timedelta(days=30)
-    )
-    content = "\n".join([f"{h.date}: {h.description}" async for h in holidays])
-    return await message.channel.send(
-        embed=discord.Embed(
-            title="🎉 Upcoming Holidays!",
-            description=content,
-            color=discord.Color.green(),
-        )
-    )
