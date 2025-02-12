@@ -21,11 +21,10 @@ from core.models import Holiday
 from core.models import Journal
 from core.models import Message
 from discord_bot.commands.absences import create_absence
-from discord_bot.commands.absences import list_absences
-from discord_bot.commands.check_ins import attendance_summary_and_holidays
 from discord_bot.commands.check_ins import create_check_in
 from discord_bot.commands.holidays import create_holiday
 from discord_bot.commands.journals import create_journal
+from discord_bot.commands.summary import summary
 
 from .utils import get_date_from_message
 
@@ -152,10 +151,7 @@ class MyClient(discord.Client):
 
             # handle absences
             if message.channel.id == ENV.ABSENCE_DISCORD_CHANNEL_ID:
-                if message.content.lower() == "list absences":
-                    return await list_absences(user, message)
-                else:
-                    return await create_absence(user, message)
+                return await create_absence(user, message)
 
             # handle journals
             if message.channel.id == ENV.JOURNAL_DISCORD_CHANNEL_ID:
@@ -166,7 +162,7 @@ class MyClient(discord.Client):
                 return await create_holiday(user, message)
 
             if message.channel.id == ENV.SUMMARY_DISCORD_CHANNEL_ID:
-                return await attendance_summary_and_holidays(message)
+                return await summary(user, message)
 
         except Exception:
             logger.exception(
