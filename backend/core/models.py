@@ -2,6 +2,7 @@ import secrets
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 
 def get_default_token():
@@ -10,7 +11,7 @@ def get_default_token():
 
 class CheckIn(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_created = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(default=timezone.now)
     message = models.TextField(default="", blank=True)
 
     def __str__(self):
@@ -20,7 +21,7 @@ class CheckIn(models.Model):
 class Absence(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     days = models.PositiveSmallIntegerField(default=1)
-    date_created = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(default=timezone.now)
     message = models.TextField(default="", blank=True)
 
     def __str__(self):
@@ -29,7 +30,7 @@ class Absence(models.Model):
 
 class Journal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_created = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(default=timezone.now)
     message = models.TextField(default="", blank=True)
 
     def __str__(self):
@@ -38,7 +39,7 @@ class Journal(models.Model):
 
 class Holiday(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_created = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(default=timezone.now)
     date = models.DateField()
     description = models.TextField(default="", blank=True)
 
@@ -83,4 +84,4 @@ class Token(models.Model):
         max_length=255, unique=True, default=get_default_token
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_created = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(default=timezone.now)
