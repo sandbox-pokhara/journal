@@ -21,12 +21,10 @@ from core.models import Holiday
 from core.models import Journal
 from core.models import Message
 from discord_bot.commands.absences import create_absence
-from discord_bot.commands.absences import list_absences
-from discord_bot.commands.check_ins import attendance_summary
 from discord_bot.commands.check_ins import create_check_in
 from discord_bot.commands.holidays import create_holiday
-from discord_bot.commands.holidays import list_upcoming_holidays
 from discord_bot.commands.journals import create_journal
+from discord_bot.commands.summary import summary
 
 from .utils import get_date_from_message
 
@@ -162,17 +160,11 @@ class MyClient(discord.Client):
 
             # handle check ins
             if message.channel.id == ENV.CHECK_IN_DISCORD_CHANNEL_ID:
-                if message.content.lower() == "summary":
-                    return await attendance_summary(message)
-                else:
-                    return await create_check_in(user, message)
+                return await create_check_in(user, message)
 
             # handle absences
             if message.channel.id == ENV.ABSENCE_DISCORD_CHANNEL_ID:
-                if message.content.lower() == "list absences":
-                    return await list_absences(user, message)
-                else:
-                    return await create_absence(user, message)
+                return await create_absence(user, message)
 
             # handle journals
             if message.channel.id == ENV.JOURNAL_DISCORD_CHANNEL_ID:
@@ -180,10 +172,11 @@ class MyClient(discord.Client):
 
             # handle holidays
             if message.channel.id == ENV.HOLIDAY_DISCORD_CHANNEL_ID:
-                if message.content.lower() == "list upcoming":
-                    return await list_upcoming_holidays(message)
-                else:
-                    return await create_holiday(user, message)
+                return await create_holiday(user, message)
+
+            if message.channel.id == ENV.SUMMARY_DISCORD_CHANNEL_ID:
+                return await summary(user, message)
+
         except Exception:
             logger.exception(
                 "An unexpected error occured. Please check the logs."

@@ -21,6 +21,7 @@ class Environment(BaseSettings):
     ABSENCE_DISCORD_CHANNEL_ID: int = 0
     JOURNAL_DISCORD_CHANNEL_ID: int = 0
     HOLIDAY_DISCORD_CHANNEL_ID: int = 0
+    SUMMARY_DISCORD_CHANNEL_ID: int = 0
 
 
 ENV = Environment()
