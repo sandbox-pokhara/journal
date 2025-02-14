@@ -175,7 +175,9 @@ class MyClient(discord.Client):
                 return await create_holiday(user, message)
 
             if message.channel.id == ENV.SUMMARY_DISCORD_CHANNEL_ID:
-                return await summary(user, message)
+                if message.content.lower() == "summary":
+                    return await summary(user, message)
+                return
 
         except Exception:
             logger.exception(
