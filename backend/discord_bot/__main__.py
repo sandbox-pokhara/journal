@@ -45,7 +45,12 @@ class MyClient(discord.Client):
             if message.channel.id not in EDIT_DELETE_ENABLED_CHANNELS:
                 return
 
-            message_record = await Message.objects.aget(id=message.id)
+            message_record = await Message.objects.filter(
+                id=message.id
+            ).afirst()
+
+            if message_record is None:
+                return
 
             check_in_id = getattr(message_record, "check_in_id", None)
             absence_id = getattr(message_record, "absence_id", None)
@@ -90,7 +95,10 @@ class MyClient(discord.Client):
                 return
 
             updated_message = after.content
-            message_record = await Message.objects.aget(id=after.id)
+            message_record = await Message.objects.filter(id=after.id).afirst()
+
+            if message_record is None:
+                return
 
             check_in_id = getattr(message_record, "check_in_id", None)
             absence_id = getattr(message_record, "absence_id", None)
