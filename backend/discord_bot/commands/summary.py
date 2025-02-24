@@ -35,13 +35,17 @@ async def summary(user: User, message: discord.Message):
 
     holidays = Holiday.objects.filter(
         date__gte=today, date__lt=today + timedelta(days=30)
-    )
+    ).order_by("date")
     if not await holidays.aexists():
         content = "No results."
     else:
         content = "\n".join(
-            [f"{h.date}: {h.description}" async for h in holidays]
+            [
+                f"{h.date} ({h.date.strftime('%a')}): {h.description}"
+                async for h in holidays
+            ]
         )
+
     output += f"**Upcoming holidays:**\n{content}\n\n"
 
     # list absence
