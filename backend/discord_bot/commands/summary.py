@@ -39,9 +39,12 @@ async def summary(user: User, message: discord.Message):
     if not await holidays.aexists():
         content = "No results."
     else:
-      content = "\n".join(
-    [f"**{h.date}** (**{h.date.strftime('%A')}**): {h.description}" async for h in holidays]
-)
+        content = "\n".join(
+            [
+                f"**{h.date}** (**{h.date.strftime('%A')}**): {h.description}"
+                async for h in holidays
+            ]
+        )
 
     output += f"**Upcoming holidays:**\n{content}\n\n"
 
