@@ -41,7 +41,7 @@ async def summary(user: User, message: discord.Message):
     else:
         content = "\n".join(
             [
-                f"**{h.date}** (**{h.date.strftime('%A')}**): {h.description}"
+                f"{h.date} ({h.date.strftime('%a')}): {h.description}"
                 async for h in holidays
             ]
         )
