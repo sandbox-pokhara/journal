@@ -13,14 +13,14 @@ def get_default_token():
 class UserDetail(models.Model):
     TIMEZONE_CHOICES = [(tz, tz) for tz in pytz.all_timezones]
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="user_details"
+        User, on_delete=models.CASCADE, related_name="user_detail"
     )
     timezone = models.CharField(
         max_length=50, choices=TIMEZONE_CHOICES, default="Asia/Kathmandu"
     )
 
     def __str__(self):
-        return f"{self.user.username} details"
+        return f"{self.user.username} detail"
 
 
 class CheckIn(models.Model):
