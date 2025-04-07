@@ -1,5 +1,6 @@
 import secrets
 
+import pytz
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
@@ -7,6 +8,19 @@ from django.utils import timezone
 
 def get_default_token():
     return secrets.token_hex(20)
+
+
+class UserDetail(models.Model):
+    TIMEZONE_CHOICES = [(tz, tz) for tz in pytz.all_timezones]
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="user_detail"
+    )
+    timezone = models.CharField(
+        max_length=50, choices=TIMEZONE_CHOICES, default="Asia/Kathmandu"
+    )
+
+    def __str__(self):
+        return f"{self.user.username} detail"
 
 
 class CheckIn(models.Model):

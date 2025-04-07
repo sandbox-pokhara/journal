@@ -7,6 +7,13 @@ from .models import Holiday
 from .models import Journal
 from .models import Message
 from .models import Token
+from .models import UserDetail
+
+
+@admin.register(UserDetail)
+class UserDetailAdmin(DjangoQLSearchMixin, admin.ModelAdmin[UserDetail]):
+    list_display = ("id", "user", "timezone")
+    autocomplete_fields = ("user",)
 
 
 @admin.register(CheckIn)
