@@ -17,12 +17,13 @@ async def create_check_in(user: User, message: discord.Message):
         user_tz = settings.TIME_ZONE
 
     tz = pytz.timezone(user_tz)
-    utc_now = timezone.now()
-    local_time = utc_now.astimezone(tz)
-    today_date = local_time.date()
+    user_local_time = timezone.now().astimezone(tz)
+    user_local_midnight = user_local_time.replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
 
     checkin_count = await CheckIn.objects.filter(
-        user=user, date_created__date=today_date
+        user=user, date_created__gt=user_local_midnight
     ).acount()
     if checkin_count >= 1:
         return await message.channel.send(
@@ -34,7 +35,7 @@ async def create_check_in(user: User, message: discord.Message):
         )
 
     check_in = await CheckIn.objects.acreate(
-        user=user, message=message.content, date_created=local_time
+        user=user, message=message.content
     )
     await Message.objects.acreate(id=message.id, check_in=check_in)
 
