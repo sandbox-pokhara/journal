@@ -1,5 +1,6 @@
 import discord
 from django.contrib.auth.models import User
+from django.db.models import Sum
 from django.utils import timezone
 from django.utils.timezone import localdate
 from django.utils.timezone import timedelta
@@ -23,7 +24,9 @@ async def summary(user: User, message: discord.Message):
             date__lte=localdate(timezone.now()),
         ).acount()
         check_ins = await CheckIn.objects.filter(user=u).acount()
-        absences = await Absence.objects.filter(user=u).acount()
+        absences = (
+            await Absence.objects.filter(user=u).aaggregate(Sum("days"))
+        )["days__sum"]
         days_to_cover = total_days - holidays_count - check_ins - absences
         day = "day" if days_to_cover == 1 else "days"
         table.append(f"{u.username} has {days_to_cover} {day} to cover.")
