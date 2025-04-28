@@ -29,7 +29,8 @@ async def summary(user: User, message: discord.Message):
         )["days__sum"]
         days_to_cover = total_days - holidays_count - check_ins - absences
         day = "day" if days_to_cover == 1 else "days"
-        table.append(f"{u.username} has {days_to_cover} {day} to cover.")
+        if days_to_cover < 7:
+            table.append(f"{u.username} has {days_to_cover} {day} to cover.")
     table_str = "\n".join(table)
     output += f"**Attendance:**\n{table_str}\n\n"
 
