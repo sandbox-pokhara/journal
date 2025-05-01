@@ -15,7 +15,7 @@ async def summary(user: User, message: discord.Message):
 
     # attendence table
     table: list[str] = []
-    async for u in User.objects.all():
+    async for u in User.objects.filter(is_active=True):
         total_days = (
             localdate(timezone.now()) - localdate(u.date_joined)
         ).days + 1
@@ -26,7 +26,7 @@ async def summary(user: User, message: discord.Message):
         check_ins = await CheckIn.objects.filter(user=u).acount()
         absences = (
             await Absence.objects.filter(user=u).aaggregate(Sum("days"))
-        )["days__sum"]
+        )["days__sum"] or 0
         days_to_cover = total_days - holidays_count - check_ins - absences
         day = "day" if days_to_cover == 1 else "days"
         table.append(f"{u.username} has {days_to_cover} {day} to cover.")
