@@ -99,3 +99,8 @@ class Token(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField(default=timezone.now)
+
+
+class Webhook(models.Model):
+    webhook_url = models.URLField(default="")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
