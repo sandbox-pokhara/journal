@@ -37,6 +37,7 @@ class Absence(models.Model):
     days = models.PositiveSmallIntegerField(default=1)
     date_created = models.DateTimeField(default=timezone.now)
     message = models.TextField(default="", blank=True)
+    is_paid = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Absence #{self.pk}"
