@@ -28,6 +28,7 @@ class AbsenceAdmin(DjangoQLSearchMixin, admin.ModelAdmin[Absence]):
         "user",
         "message",
         "days",
+        "is_paid",
         "date_created",
     )
     list_filter = ("date_created",)
