@@ -1,13 +1,7 @@
 from django.contrib import admin
 from djangoql.admin import DjangoQLSearchMixin  # type: ignore
 
-from .models import Absence
-from .models import CheckIn
-from .models import Holiday
-from .models import Journal
-from .models import Message
-from .models import Token
-from .models import UserDetail
+from .models import Absence, CheckIn, Holiday, Journal, Message, Token, UserDetail
 
 
 @admin.register(UserDetail)

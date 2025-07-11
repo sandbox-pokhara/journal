@@ -1,19 +1,19 @@
-[tool.isort]
-src_paths = ["backend"]
-skip_glob = ["*/migrations/*"]
+[tool.ruff]
+src = ["./backend"]
+exclude = ["./backend/**/migrations/"]
 
-line_length = 79
-force_single_line = true
+[tool.ruff.lint]
+extend-select = ["I"]
 
-[tool.black]
-line-length = 79
-preview = true
-enable-unstable-feature = ["string_processing"]
-extend-exclude = "migrations"
+[tool.ty.environment]
+root = ["./backend"]
+
+[tool.ty.src]
+exclude = ["./backend/**/migrations/"]
 
 [tool.pyright]
 venvPath = "."
-venv = "venv"
+venv = ".venv"
 typeCheckingMode = "strict"
 executionEnvironments = [{ root = "backend" }]
 include = ["backend"]

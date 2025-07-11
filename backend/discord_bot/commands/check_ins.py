@@ -4,9 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from core.models import CheckIn
-from core.models import Message
-from core.models import UserDetail
+from core.models import CheckIn, Message, UserDetail
 
 
 async def create_check_in(user: User, message: discord.Message):
@@ -34,9 +32,7 @@ async def create_check_in(user: User, message: discord.Message):
             )
         )
 
-    check_in = await CheckIn.objects.acreate(
-        user=user, message=message.content
-    )
+    check_in = await CheckIn.objects.acreate(user=user, message=message.content)
     await Message.objects.acreate(id=message.id, check_in=check_in)
 
     return await message.add_reaction("👋")

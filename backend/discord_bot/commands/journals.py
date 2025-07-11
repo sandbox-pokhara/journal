@@ -1,8 +1,7 @@
 import discord
 from django.contrib.auth.models import User
 
-from core.models import Journal
-from core.models import Message
+from core.models import Journal, Message
 
 
 async def create_journal(user: User, message: discord.Message):

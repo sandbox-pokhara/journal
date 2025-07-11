@@ -95,8 +95,6 @@ class Message(models.Model):
 
 
 class Token(models.Model):
-    key = models.CharField(
-        max_length=255, unique=True, default=get_default_token
-    )
+    key = models.CharField(max_length=255, unique=True, default=get_default_token)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField(default=timezone.now)
