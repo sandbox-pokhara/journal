@@ -2,12 +2,9 @@ import discord
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.utils import timezone
-from django.utils.timezone import localdate
-from django.utils.timezone import timedelta
+from django.utils.timezone import localdate, timedelta
 
-from core.models import Absence
-from core.models import CheckIn
-from core.models import Holiday
+from core.models import Absence, CheckIn, Holiday
 
 
 async def summary(user: User, message: discord.Message):
@@ -16,16 +13,14 @@ async def summary(user: User, message: discord.Message):
     # attendence table
     table: list[str] = []
     async for u in User.objects.filter(is_active=True):
-        total_days = (
-            localdate(timezone.now()) - localdate(u.date_joined)
-        ).days + 1
+        total_days = (localdate(timezone.now()) - localdate(u.date_joined)).days + 1
         holidays_count = await Holiday.objects.filter(
             date__gte=localdate(u.date_joined),
             date__lte=localdate(timezone.now()),
         ).acount()
         check_ins = await CheckIn.objects.filter(user=u).acount()
         absences = (
-            await Absence.objects.filter(user=u).aaggregate(Sum("days"))
+            await Absence.objects.filter(user=u, is_paid=True).aaggregate(Sum("days"))
         )["days__sum"] or 0
         days_to_cover = total_days - holidays_count - check_ins - absences
         day = "day" if days_to_cover == 1 else "days"
@@ -66,7 +61,7 @@ async def summary(user: User, message: discord.Message):
 
     await message.channel.send(
         embed=discord.Embed(
-            title=f"🎉 Summary",
+            title="🎉 Summary",
             description=output,
             color=discord.Color.green(),
         )

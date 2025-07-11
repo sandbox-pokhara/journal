@@ -1,8 +1,7 @@
 import discord
 from django.contrib.auth.models import User
 
-from core.models import Holiday
-from core.models import Message
+from core.models import Holiday, Message
 from discord_bot.utils import get_date_from_message
 
 

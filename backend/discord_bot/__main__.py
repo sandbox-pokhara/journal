@@ -13,20 +13,16 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 django.setup()
 
 # django imports MUST be done after django setup
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User  # noqa: E402
 
-from core.models import Absence
-from core.models import CheckIn
-from core.models import Holiday
-from core.models import Journal
-from core.models import Message
-from discord_bot.commands.absences import create_absence
-from discord_bot.commands.check_ins import create_check_in
-from discord_bot.commands.holidays import create_holiday
-from discord_bot.commands.journals import create_journal
-from discord_bot.commands.summary import summary
+from core.models import Absence, CheckIn, Holiday, Journal, Message  # noqa: E402
+from discord_bot.commands.absences import create_absence  # noqa: E402
+from discord_bot.commands.check_ins import create_check_in  # noqa: E402
+from discord_bot.commands.holidays import create_holiday  # noqa: E402
+from discord_bot.commands.journals import create_journal  # noqa: E402
+from discord_bot.commands.summary import summary  # noqa: E402
 
-from .utils import get_date_from_message
+from .utils import get_date_from_message  # noqa: E402
 
 EDIT_DELETE_ENABLED_CHANNELS = [
     ENV.CHECK_IN_DISCORD_CHANNEL_ID,
@@ -45,9 +41,7 @@ class MyClient(discord.Client):
             if message.channel.id not in EDIT_DELETE_ENABLED_CHANNELS:
                 return
 
-            message_record = await Message.objects.filter(
-                id=message.id
-            ).afirst()
+            message_record = await Message.objects.filter(id=message.id).afirst()
 
             if message_record is None:
                 return
@@ -74,22 +68,16 @@ class MyClient(discord.Client):
                 await holiday.adelete()
 
         except Exception:
-            logger.exception(
-                "An unexpected error occured. Please check the logs."
-            )
+            logger.exception("An unexpected error occured. Please check the logs.")
             return await message.channel.send(
                 embed=discord.Embed(
                     title="❌ Oops!",
-                    description=(
-                        "An unexcepted error occured. Please check the logs."
-                    ),
+                    description=("An unexcepted error occured. Please check the logs."),
                     color=discord.Color.orange(),
                 )
             )
 
-    async def on_message_edit(
-        self, before: discord.Message, after: discord.Message
-    ):
+    async def on_message_edit(self, before: discord.Message, after: discord.Message):
         try:
             if after.channel.id not in EDIT_DELETE_ENABLED_CHANNELS:
                 return
@@ -127,15 +115,11 @@ class MyClient(discord.Client):
                 await holiday.asave()
 
         except Exception:
-            logger.exception(
-                "An unexpected error occured. Please check the logs."
-            )
+            logger.exception("An unexpected error occured. Please check the logs.")
             return await after.channel.send(
                 embed=discord.Embed(
                     title="❌ Oops!",
-                    description=(
-                        "An unexcepted error occured. Please check the logs."
-                    ),
+                    description=("An unexcepted error occured. Please check the logs."),
                     color=discord.Color.orange(),
                 )
             )
@@ -159,9 +143,7 @@ class MyClient(discord.Client):
                 return await message.channel.send(
                     embed=discord.Embed(
                         title="❌ Oops!",
-                        description=(
-                            "User doesn't exist. Contact your administrator."
-                        ),
+                        description=("User doesn't exist. Contact your administrator."),
                         color=discord.Color.orange(),
                     )
                 )
@@ -188,15 +170,11 @@ class MyClient(discord.Client):
                 return
 
         except Exception:
-            logger.exception(
-                "An unexpected error occured. Please check the logs."
-            )
+            logger.exception("An unexpected error occured. Please check the logs.")
             return await message.channel.send(
                 embed=discord.Embed(
                     title="❌ Oops!",
-                    description=(
-                        "An unexcepted error occured. Please check the logs."
-                    ),
+                    description=("An unexcepted error occured. Please check the logs."),
                     color=discord.Color.orange(),
                 )
             )

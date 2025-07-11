@@ -37,6 +37,7 @@ class Absence(models.Model):
     days = models.PositiveSmallIntegerField(default=1)
     date_created = models.DateTimeField(default=timezone.now)
     message = models.TextField(default="", blank=True)
+    is_paid = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Absence #{self.pk}"
@@ -94,13 +95,12 @@ class Message(models.Model):
 
 
 class Token(models.Model):
-    key = models.CharField(
-        max_length=255, unique=True, default=get_default_token
-    )
+    key = models.CharField(max_length=255, unique=True, default=get_default_token)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField(default=timezone.now)
 
 
-class Webhook(models.Model):
+class JournalRelayWebhook(models.Model):
     webhook_url = models.URLField(default="")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(default=timezone.now)

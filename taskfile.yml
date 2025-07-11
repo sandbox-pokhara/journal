@@ -9,10 +9,6 @@ tasks:
     cmds:
       - docker image push ghcr.io/sandbox-pokhara/journal
 
-  deploy-backend:
+  deploy:
     cmds:
-      - ssh andreu-ovh -t "docker service update --with-registry-auth --image ghcr.io/sandbox-pokhara/journal journal_backend"
-
-  deploy-discord-bot:
-    cmds:
-      - ssh andreu-ovh -t "docker service update --with-registry-auth --image ghcr.io/sandbox-pokhara/journal journal_discord_bot"
+      - ssh ubuntu@51.178.66.98 -t "docker stack deploy -c journal/docker-compose.yml --with-registry-auth journal --detach=false"
