@@ -21,7 +21,7 @@ async def create_absence(user: User, message: discord.Message):
         absence = await Absence.objects.acreate(
             user=user,
             message=message.content,
-            id_paid=False,
+            is_paid=False,
         )
         await Message.objects.acreate(id=message.id, absence=absence)
         return await message.add_reaction("❌")
@@ -29,7 +29,7 @@ async def create_absence(user: User, message: discord.Message):
     absence = await Absence.objects.acreate(
         user=user,
         message=message.content,
-        id_paid=True,
+        is_paid=True,
     )
     await Message.objects.acreate(id=message.id, absence=absence)
     return await message.add_reaction("🫡")
