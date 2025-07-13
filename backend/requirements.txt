@@ -1,11 +1,12 @@
 discord.py==2.*
 django-stubs-ext
 django-types
-djangoql
 Django==5.*
+djangoql
 gunicorn
+httpx
 psycopg2-binary==2.*
 pydantic-settings==2.*
-pytz
 pydantic==2.*
+pytz
 whitenoise==6.*

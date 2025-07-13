@@ -1,7 +1,16 @@
 from django.contrib import admin
 from djangoql.admin import DjangoQLSearchMixin  # type: ignore
 
-from .models import Absence, CheckIn, Holiday, Journal, Message, Token, UserDetail
+from .models import (
+    Absence,
+    CheckIn,
+    Holiday,
+    Journal,
+    JournalRelayWebhook,
+    Message,
+    Token,
+    UserDetail,
+)
 
 
 @admin.register(UserDetail)
@@ -72,4 +81,12 @@ class MessageAdmin(DjangoQLSearchMixin, admin.ModelAdmin[Message]):
 class TokenAdmin(DjangoQLSearchMixin, admin.ModelAdmin[Token]):
     list_display = ["key", "user", "date_created"]
     fields = ("user",)
+    autocomplete_fields = ["user"]
+
+
+@admin.register(JournalRelayWebhook)
+class JournalRelayWebhookAdmin(
+    DjangoQLSearchMixin, admin.ModelAdmin[JournalRelayWebhook]
+):
+    list_display = ["webhook_url", "user"]
     autocomplete_fields = ["user"]
