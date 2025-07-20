@@ -100,7 +100,6 @@ class Token(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
 
 
-class JournalRelayWebhook(models.Model):
+class Webhook(models.Model):
     webhook_url = models.URLField(default="")
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField(default=timezone.now)

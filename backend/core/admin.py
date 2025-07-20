@@ -6,10 +6,10 @@ from .models import (
     CheckIn,
     Holiday,
     Journal,
-    JournalRelayWebhook,
     Message,
     Token,
     UserDetail,
+    Webhook,
 )
 
 
@@ -84,9 +84,6 @@ class TokenAdmin(DjangoQLSearchMixin, admin.ModelAdmin[Token]):
     autocomplete_fields = ["user"]
 
 
-@admin.register(JournalRelayWebhook)
-class JournalRelayWebhookAdmin(
-    DjangoQLSearchMixin, admin.ModelAdmin[JournalRelayWebhook]
-):
-    list_display = ["webhook_url", "user"]
-    autocomplete_fields = ["user"]
+@admin.register(Webhook)
+class WebhookAdmin(DjangoQLSearchMixin, admin.ModelAdmin[Webhook]):
+    list_display = ["webhook_url", "date_created"]

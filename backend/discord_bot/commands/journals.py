@@ -2,26 +2,21 @@ import discord
 import httpx
 from django.contrib.auth.models import User
 
-from core.models import Journal, JournalRelayWebhook, Message
+from core.models import Journal, Message, Webhook
 
 
 async def create_journal(user: User, message: discord.Message):
     journal = await Journal.objects.acreate(user=user, message=message.content)
     await Message.objects.acreate(id=message.id, journal=journal)
 
-    webhooks: list[JournalRelayWebhook] = []
-    async for webhook in JournalRelayWebhook.objects.filter(user=user):
+    webhooks: list[Webhook] = []
+    async for webhook in Webhook.objects.all():
         webhooks.append(webhook)
 
     if webhooks:
         payload = {
             "username": "Sandbox Journal",
-            "embeds": [
-                {
-                    "title": user.username,
-                    "description": message.content,
-                }
-            ],
+            "content": f"journal - {user.username} - {message.content}",
         }
         headers = {"Content-Type": "application/json"}
 
