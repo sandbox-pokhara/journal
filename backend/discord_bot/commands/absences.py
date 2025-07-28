@@ -18,21 +18,14 @@ async def create_absence(user: User, message: discord.Message):
         ).aaggregate(Sum("days"))
     )["days__sum"] or 0
 
-    if total_absences >= ENV.ABSENCES_ALLOWED_PER_MONTH:
-        absence = await Absence.objects.acreate(
-            user=user,
-            message=message.content,
-            is_paid=False,
-        )
-        await Message.objects.acreate(id=message.id, absence=absence)
-        return await message.add_reaction("❌")
-
+    is_paid = total_absences < ENV.ABSENCES_ALLOWED_PER_MONTH
     absence = await Absence.objects.acreate(
         user=user,
         message=message.content,
-        is_paid=True,
+        is_paid=is_paid,
     )
     await Message.objects.acreate(id=message.id, absence=absence)
+    await message.add_reaction("🫡" if is_paid else "❌")
 
     webhooks: list[Webhook] = []
     async for webhook in Webhook.objects.all():
@@ -69,5 +62,3 @@ async def create_absence(user: User, message: discord.Message):
                             description=f"An error occurred while requesting {e}.",
                         )
                     )
-
-    return await message.add_reaction("🫡")
