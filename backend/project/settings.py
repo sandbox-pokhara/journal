@@ -100,6 +100,7 @@ DATABASES = {
         "PASSWORD": ENV.POSTGRES_PASSWORD,
         "HOST": ENV.POSTGRES_HOST,
         "PORT": ENV.POSTGRES_PORT,
+        "CONN_MAX_AGE": 60,
     }
 }
 
