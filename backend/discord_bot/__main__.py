@@ -3,6 +3,7 @@ import os
 
 import discord
 import django
+from django.db import close_old_connections
 
 from project.env import ENV
 
@@ -38,6 +39,7 @@ class MyClient(discord.Client):
 
     async def on_message_delete(self, message: discord.Message):
         try:
+            close_old_connections()
             if message.channel.id not in EDIT_DELETE_ENABLED_CHANNELS:
                 return
 
@@ -79,6 +81,7 @@ class MyClient(discord.Client):
 
     async def on_message_edit(self, before: discord.Message, after: discord.Message):
         try:
+            close_old_connections()
             if after.channel.id not in EDIT_DELETE_ENABLED_CHANNELS:
                 return
 
@@ -126,6 +129,7 @@ class MyClient(discord.Client):
 
     async def on_message(self, message: discord.Message):
         try:
+            close_old_connections()
             # don't respond to ourselves
             if message.author == self.user:
                 return
